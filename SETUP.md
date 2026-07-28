@@ -10,35 +10,23 @@ read them back.
 
 Supabase's database can't send email on its own — it needs an email provider
 behind it. This project uses **Resend** (free tier, no credit card) called
-from a small Supabase Edge Function, triggered by a Database Webhook.
+from a Supabase Edge Function, fired by a plain SQL trigger.
 
-**a. Get a Resend API key**
-1. Sign up at resend.com (free tier).
-2. Dashboard → API Keys → Create API Key. Copy it.
-3. Without your own verified sending domain, Resend only lets you send to
-   the email you signed up with. Verifying `saturnservices2015@gmail.com`'s
-   domain isn't possible (it's a Gmail address) — either sign up to Resend
-   *with* that Gmail address so it's the verified recipient, or verify a
-   domain you own later and send from `enquiries@yourdomain.com`.
+**Status: function deployed and secret set already** (done via `supabase` CLI:
+`supabase/functions/notify-enquiry` is live, and `RESEND_API_KEY` is set as
+a function secret). The only remaining step is the trigger, which lives in
+`supabase.sql` — run that file (again, it's idempotent) in the SQL Editor
+to wire it up.
 
-**b. Deploy the Edge Function**
+**Resend sandbox limit:** without a verified sending domain, Resend only
+delivers to the email address you signed up to Resend with. The function
+defaults to notifying `saturnservices2015@gmail.com` — if that's not your
+Resend signup address, either sign up to Resend with that Gmail address,
+or verify a domain later and update `NOTIFY_TO` / `NOTIFY_FROM` as Edge
+Function secrets (`supabase secrets set NOTIFY_TO=... NOTIFY_FROM=...`).
 
-The function lives at `supabase/functions/notify-enquiry/index.ts`. Easiest
-path is the Supabase Dashboard (no CLI/token needed from Claude):
-1. Dashboard → Edge Functions → Create a new function, name it `notify-enquiry`.
-2. Paste in the contents of `supabase/functions/notify-enquiry/index.ts`.
-3. Deploy.
-4. Project Settings → Edge Functions → Secrets → add `RESEND_API_KEY` with
-   the key from step (a).
-
-**c. Wire up the Database Webhook**
-1. Dashboard → Database → Webhooks → Create a new webhook.
-2. Table: `enquiries`. Events: `Insert`.
-3. Type: Supabase Edge Function → select `notify-enquiry`.
-4. Save.
-
-That's it — every new row in `enquiries` now emails
-`saturnservices2015@gmail.com` with the submitted details.
+That's it — every new row in `enquiries` now emails the configured address
+with the submitted details.
 
 ## 3. Hosting (Cloudflare Pages)
 
