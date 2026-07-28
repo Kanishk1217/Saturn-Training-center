@@ -674,7 +674,7 @@ section { position: relative; }
   margin-bottom: 16px;
 }
 .loc-card .icon svg { width: 18px; height: 18px; color: var(--clay); }
-.loc-card h4 { font-size: 16.5px; font-weight: 600; }
+.loc-card h4 { font-size: 16.5px; font-weight: 600; color: var(--ink); }
 .loc-card p { font-size: 13.5px; color: var(--ink-soft); margin-top: 6px; }
 
 .mode-row {
@@ -693,6 +693,7 @@ section { position: relative; }
   border: 1px solid var(--stone-line);
   font-size: 13.5px;
   font-weight: 600;
+  color: var(--ink);
 }
 .mode-pill svg { width: 15px; height: 15px; color: var(--clay); }
 
