@@ -20,7 +20,7 @@ if (prefersReducedMotion) {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         const el = entry.target;
-        const staggerItems = el.querySelectorAll(".bento-card, .tl-item, .loc-card");
+        const staggerItems = el.querySelectorAll(".bento-card, .loc-card");
         if (staggerItems.length) {
           staggerItems.forEach((item, i) => {
             item.style.transitionDelay = `${Math.min(i * 45, 400)}ms`;
