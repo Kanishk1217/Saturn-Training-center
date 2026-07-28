@@ -110,18 +110,6 @@ function setStatus(message, tone) {
   formStatus.lastChild.textContent = ` ${message}`;
 }
 
-function buildWhatsAppMessage(data) {
-  const lines = [
-    "Hi Saturn UPSC / GPSC Training Centre, I'd like to enquire about the Ancient India course.",
-    `Name: ${data.name}`,
-    `Phone: ${data.phone}`,
-    data.email ? `Email: ${data.email}` : null,
-    `Preferred centre: ${data.location}`,
-    data.message ? `Message: ${data.message}` : null,
-  ].filter(Boolean);
-  return lines.join("\n");
-}
-
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -151,10 +139,7 @@ form?.addEventListener("submit", async (e) => {
       const { error } = await supabase.from("enquiries").insert([data]);
       if (error) throw error;
     }
-    setStatus("Enquiry sent. Opening WhatsApp to confirm details…", "is-success");
-    const waNumber = cfg.WHATSAPP_NUMBER || "919499500333";
-    const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(buildWhatsAppMessage(data))}`;
-    window.open(waUrl, "_blank", "noopener");
+    setStatus("Enquiry sent. We'll get back to you soon.", "is-success");
     form.reset();
   } catch (err) {
     console.error("Enquiry submission failed:", err);
